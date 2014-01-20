@@ -2,47 +2,34 @@
 require 'spec_helper'
 
 describe "Controller:StaticPages--" do
-
-	describe "action:Home pages--" do
-
-		it "首页中要有一个sample app字段" do
-			# Run the generator again with the --webrat flag if you want to use webrat methods/matchers
-		
-		visit '/static_pages/home'
-		page.should have_selector('h1',:text=>"Sample App")
-		end
-                 it "should have the right title" do
-			visit '/static_pages/home'
-			page.should have_selector('title',:text=>"Ruby on Rails Tutorial Sample App")
-		end
-		it "should  not have the HOMe title" do
-			visit '/static_pages/home'
-			page.should_not have_selector('title',:text=>"| home")
-		end
+   subject {page}
+   shared_examples_for "all static pages" do
+    it{ should have_selector('h1', text:heading)}
+	it{ should have_selector('title',text: full_title(page_title))}
 	end
 
+	describe "action:Home pages--" do
+        before {visit root_path}
+		it { should have_selector('h1',:text=>"Sample App")}
+		it { should have_selector('title',text:full_title(''))}
+   
+		it { should_not have_selector('title',:text=>"| home")}
+		end
 	describe "action:Help pages--" do
-
-		it "帮助页中也要一个help" do
-			visit '/static_pages/help'
-			page.should have_selector('h1',:text=>'Help')
-		end
-		it "should have the right title" do
-			visit '/static_pages/help'
-			page.should have_selector('title',:text=>"Ruby on Rails Tutorial Sample App | Help")
-		end
+		before { visit help_path}
+		it{ should have_selector('h1',:text=>'Help')}
+		it{ should have_selector('title',text:full_title('Help'))}
 	end
 
 	describe "action:About pages--"do
-
-		it "关于而中要有一个about us"do
-			visit '/static_pages/about'
-			page.should have_selector('h1',:text=>'About Us')
-		end
-		it "should have the right title" do
-			visit '/static_pages/about'
-			page.should have_selector('title',:text=>"Ruby on Rails Tutorial Sample App | About")
-		end
+       before { visit about_path}
+		it{ should have_selector('h1',:text=>'About')}
+	    it{ should have_selector('title',text:full_title('About Us'))}
 	end
 
+	describe "action:Contack page" do
+		before { visit contact_path}
+		it{ should have_selector('h1',text:'Contact')}
+	    it{ should have_selector('title',text:full_title('Contact'))}
+	end
 end
